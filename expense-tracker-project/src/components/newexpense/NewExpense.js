@@ -1,7 +1,15 @@
+import { useState } from "react";
 import Form from "./Form";
 import "./NewExpense.css";
 
 const NewExpense = ({ newExpenseDataAdder }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const startEditing = () => {
+    setIsEditing(true);
+  };
+  const stopEditing = () => {
+    setIsEditing(false);
+  };
   const onNewExpenseData = (expenseData) => {
     const data = {
       ...expenseData,
@@ -11,7 +19,10 @@ const NewExpense = ({ newExpenseDataAdder }) => {
   };
   return (
     <div className="new-expense">
-      <Form onNewExpenseData={onNewExpenseData} />
+      {!isEditing && <button onClick={startEditing}>Add New Expense</button>}
+      {isEditing && (
+        <Form stopEditing={stopEditing} onNewExpenseData={onNewExpenseData} />
+      )}
     </div>
   );
 };
