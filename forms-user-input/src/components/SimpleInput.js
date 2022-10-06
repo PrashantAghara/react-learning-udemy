@@ -36,7 +36,7 @@ const SimpleInput = (props) => {
     enteredValueBlurHandler: nameInputBlur,
     reset,
   } = useInput((value) => {
-    value.trim() !== "";
+    return value.trim() !== "";
   });
   const inputValidClass = nameInputIsInvalid
     ? "form-control invalid"
@@ -68,8 +68,7 @@ const SimpleInput = (props) => {
 
   const formSubmitHandler = (event) => {
     event.preventDefault();
-    setNameTouched(true);
-    console.log(name);
+    setEmailTouched(true);
     if (!nameIsValid && !emailIsValid) {
       return;
     }
