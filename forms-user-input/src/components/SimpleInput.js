@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import useInput from "../hooks/use-input";
 const SimpleInput = (props) => {
   //ref approach
   //   const nameInputRef = useRef();
@@ -16,47 +16,55 @@ const SimpleInput = (props) => {
   //   }
   // }, [nameIsValid]);
 
-  const emailRegex = /^[a-zA-Z0-9.]+@gmail.com$/;
+  // const [name, setName] = useState("");
+  // const [nameTouched, setNameTouched] = useState(false);
+  // const nameIsValid = name.trim() !== "";
+  // const nameInputIsInvalid = !nameIsValid && nameTouched;
+  // const nameChangeHandler = (event) => {
+  //   setName(event.target.value);
+  // };
+  // const nameInputBlur = (event) => {
+  //   setNameTouched(true);
+  // };
 
-  const [name, setName] = useState("");
-  const [nameTouched, setNameTouched] = useState(false);
-  const [email, setEmail] = useState("");
-  const [emailTouched, setEmailTouched] = useState(false);
-
-  const nameIsValid = name.trim() !== "";
-  const nameInputIsInvalid = !nameIsValid && nameTouched;
+  //Custom Hook Approach
+  const {
+    value: name,
+    isValid: nameIsValid,
+    hasError: nameInputIsInvalid,
+    enteredValueChangeHandler: nameChangeHandler,
+    enteredValueBlurHandler: nameInputBlur,
+    reset,
+  } = useInput((value) => {
+    value.trim() !== "";
+  });
   const inputValidClass = nameInputIsInvalid
     ? "form-control invalid"
     : "form-control";
 
+  //useState Approach
+  const emailRegex = /^[a-zA-Z0-9.]+@gmail.com$/;
+  const [email, setEmail] = useState("");
+  const [emailTouched, setEmailTouched] = useState(false);
   const emailIsValid = email.trim() !== "" && email.trim().match(emailRegex);
   const emailInputIsInValid = !emailIsValid && emailTouched;
   const emailValidClass = nameInputIsInvalid
     ? "form-control invalid"
     : "form-control";
+  const emailChangeHandler = (event) => {
+    setEmail(event.target.value);
+  };
+  const emailInputBlur = (event) => {
+    setEmailTouched(true);
+  };
 
+  //Overall Form Validatity
   let formIsValid = false;
   if (nameIsValid && emailIsValid) {
     formIsValid = true;
   } else {
     formIsValid = false;
   }
-
-  const nameChangeHandler = (event) => {
-    setName(event.target.value);
-  };
-
-  const emailChangeHandler = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const emailInputBlur = (event) => {
-    setEmailTouched(true);
-  };
-
-  const nameInputBlur = (event) => {
-    setNameTouched(true);
-  };
 
   const formSubmitHandler = (event) => {
     event.preventDefault();
@@ -65,8 +73,9 @@ const SimpleInput = (props) => {
     if (!nameIsValid && !emailIsValid) {
       return;
     }
-    setName("");
-    setNameTouched(false);
+    reset();
+    setEmail("");
+    setEmailTouched(false);
   };
 
   return (
