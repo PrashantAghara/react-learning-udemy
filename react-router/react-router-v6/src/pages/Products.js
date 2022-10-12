@@ -1,6 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Products = () => {
+  //Imperative Redirect
+  // const navigate = useNavigate();
+  // navigate('/welcome', {replace: true})
   return (
     <section>
       <h1>The Products Page</h1>
